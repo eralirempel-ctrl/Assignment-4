@@ -1,13 +1,21 @@
-public class Edge {
-    private Vertex source; // [cite: 26]
-    private Vertex destination; // [cite: 28]
+// Bonus
+public class Main {
+    public static void main(String[] args) {
+        Experiment.runMultipleTests();
 
-    public Edge(Vertex source, Vertex destination) { // [cite: 31]
-        this.source = source;
-        this.destination = destination;
+        System.out.println("\n=== Bonus: Dijkstra's Algorithm ===");
+        Graph g = new Graph();
+        for (int i = 0; i < 6; i++) g.addVertex(new Vertex(i));
+
+        g.addEdge(0, 1, 4);
+        g.addEdge(0, 2, 2);
+        g.addEdge(1, 2, 5);
+        g.addEdge(1, 3, 10);
+        g.addEdge(2, 4, 3);
+        g.addEdge(4, 3, 4);
+        g.addEdge(3, 5, 11);
+        g.addEdge(4, 5, 7);
+
+        g.dijkstra(0);
     }
-    public Vertex getSource() { return source; } // [cite: 32]
-    public Vertex getDestination() { return destination; } // [cite: 32]
-    @Override
-    public String toString() { return source + " -> " + destination; } // [cite: 33]
 }
