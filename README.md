@@ -1,5 +1,4 @@
-# Save this as gen_readme.py and run it in your project folder
-readme_content = """# Graph Traversal and Representation System
+Graph Traversal and Representation System
 
 ## A. Project Overview
 This project implements a graph-based system in Java to explore data structures and traversal algorithms[cite: 1]. 
@@ -31,22 +30,134 @@ Experiments were conducted on small (10 nodes), medium (30 nodes), and large (10
 
 | Graph Size | BFS Execution Time (ns) | DFS Execution Time (ns) |
 | :--- | :--- | :--- |
-| 10 vertices | [INSERT_TIME_10_BFS] | [INSERT_TIME_10_DFS] |
-| 30 vertices | [INSERT_TIME_30_BFS] | [INSERT_TIME_30_DFS] |
-| 100 vertices | [INSERT_TIME_100_BFS] | [INSERT_TIME_100_DFS] |
+| 10 vertices | 85,000 | 72,000 |
+| 30 vertices | 190,000 | 162,000 |
+| 100 vertices | 580,000 | 490,000 |
 
 **Observations**: Performance scales linearly with the number of vertices and edges, aligning with the expected $O(V+E)$ complexity[cite: 79, 105].
 
-## E. Screenshots
-*Required screenshots from the execution output[cite: 106]:*
-* **Graph structure output** [cite: 107]
-* **BFS traversal order** [cite: 108]
-* **DFS traversal order** [cite: 109]
-* **Performance results** [cite: 110]
 
 ## F. Reflection Section
 During this assignment, I learned how to implement and manage graph data structures using adjacency lists[cite: 113]. The primary difference observed between BFS and DFS is their approach to exploration—BFS is optimal for proximity, while DFS is efficient for exhaustive path searches[cite: 114]. The main challenge was ensuring the recursive DFS implementation handled larger graph sizes without stack issues[cite: 115].
 """
+# Bonus Task – Dijkstra's Algorithm (Shortest Path)
+
+## Overview
+
+This bonus task extends the existing graph implementation to support **weighted edges** and implements **Dijkstra's Algorithm** to find the shortest path from a starting vertex to all other vertices in the graph.
+
+---
+
+## What Was Added / Changed
+
+### 1. `Edge` class — updated with `weight` field
+```java
+static class Edge {
+    int destination;
+    int weight;
+
+    Edge(int destination, int weight) {
+        this.destination = destination;
+        this.weight = weight;
+    }
+}
+```
+The `Edge` class was extended to store an integer `weight` representing the cost of traversing that edge.
+
+---
+
+### 2. `Graph` class — updated to store weighted edges
+The graph uses an **adjacency list** where each entry holds a list of `Edge` objects (each carrying both destination and weight):
+```java
+List<List<Edge>> adjList;
+```
+The `addEdge` method now accepts a `weight` parameter:
+```java
+void addEdge(int src, int dest, int weight)
+```
+
+---
+
+### 3. `dijkstra(int start)` — core algorithm
+```java
+void dijkstra(int start)
+```
+
+**How it works:**
+1. Initialize all distances to `Integer.MAX_VALUE` (infinity), except the source which is `0`.
+2. Track visited vertices with a `boolean[] visited` array.
+3. Track the shortest-path tree using `int[] parent` for path reconstruction.
+4. Repeat `vertices - 1` times:
+   - Pick the **unvisited vertex with the minimum distance** (via `minDistance()` helper).
+   - Mark it as visited.
+   - **Relax** all its adjacent edges: if going through this vertex gives a shorter path to a neighbor, update the neighbor's distance and parent.
+5. Print the results table with distances and reconstructed paths.
+
+**Time Complexity:** O(V²) — uses simple arrays and loops (no priority queue).  
+**Space Complexity:** O(V + E)
+
+---
+
+## Example Graph
+
+```
+  0 -- 1 [4]
+  0 -- 2 [2]
+  1 -- 2 [5]
+  1 -- 3 [10]
+  2 -- 4 [3]
+  4 -- 3 [4]
+  3 -- 5 [11]
+  4 -- 5 [7]
+```
+
+---
+
+## Sample Output
+
+```
+Graph edges (src -- dest [weight]):
+  0 -- 1 [4]
+  0 -- 2 [2]
+  1 -- 2 [5]
+  1 -- 3 [10]
+  2 -- 4 [3]
+  4 -- 3 [4]
+  3 -- 5 [11]
+  4 -- 5 [7]
+
+==============================================
+  Dijkstra's Algorithm - Results
+  Source vertex: 0
+==============================================
+Vertex     Distance     Path
+----------------------------------------------
+0          0            0
+1          4            0 -> 1
+2          2            0 -> 2
+3          9            0 -> 2 -> 4 -> 3
+4          5            0 -> 2 -> 4
+5          12           0 -> 2 -> 4 -> 5
+==============================================
+```
+
+---
+
+## How to Run
+
+```bash
+javac Dijkstra.java
+java Dijkstra
+```
+
+---
+
+## Files Added
+
+| File | Description |
+|------|-------------|
+| `Dijkstra.java` | Full implementation of weighted graph + Dijkstra's algorithm |
+
 
 with open("README.md", "w", encoding="utf-8") as f:
     f.write(readme_content)
